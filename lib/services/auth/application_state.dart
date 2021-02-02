@@ -33,7 +33,7 @@ class ApplicationState extends ChangeNotifier {
             print("Message "+document.data()['message']+" timestamp - "+document.data()['timestamp'].toString());
             _groupChatMessages.add(
               Message(
-                timestamp: new DateTime.fromMicrosecondsSinceEpoch(document.data()['timestamp']),
+                timestamp: new DateTime.fromMillisecondsSinceEpoch(document.data()['timestamp']),
                 uid:  document.data()['uid'],
                 displayName: document.data()['displayName'],
                 message: document.data()['message'],

@@ -29,12 +29,12 @@ class _ChatHomeState extends State<ChatHome> {
                       (widget.loggedUserId == message.uid)?
                         Align(
                           alignment: Alignment.centerRight,
-                          child: MessageBox(message: message),
+                          child: MessageBox(message: message,isLoggedUser: true,),
                         )
                     :
                       Align(
                       alignment: Alignment.centerLeft,
-                      child: MessageBox(message: message),
+                      child: MessageBox(message: message, isLoggedUser: false,),
                       )
                   ],
                 ),
