@@ -24,17 +24,24 @@ class _ChatHomeState extends State<ChatHome> {
                 padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                 height: MediaQuery.of(context).size.height -140,
                 child: Column(
+                  verticalDirection: VerticalDirection.up,
                   children: [
                     for(var message in widget.messages)
                       (widget.loggedUserId == message.uid)?
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: MessageBox(message: message,isLoggedUser: true,),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: MessageBox(message: message,isLoggedUser: true,),
+                          ),
                         )
                     :
-                      Align(
-                      alignment: Alignment.centerLeft,
-                      child: MessageBox(message: message, isLoggedUser: false,),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                        child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: MessageBox(message: message, isLoggedUser: false,),
+                        ),
                       )
                   ],
                 ),
