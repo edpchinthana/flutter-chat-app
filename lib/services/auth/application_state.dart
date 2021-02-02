@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:chatapp/models/message.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart'; // new
 import 'package:firebase_auth/firebase_auth.dart'; // new
@@ -9,14 +12,39 @@ class ApplicationState extends ChangeNotifier {
     init();
   }
 
+  StreamSubscription<QuerySnapshot> _guestBookSubscription;
+  List<Message> _groupChatMessages = [];
+  List<Message> get guestBookMessages => _groupChatMessages;
+
   Future<void> init() async {
     await Firebase.initializeApp();
 
     FirebaseAuth.instance.userChanges().listen((user) {
       if (user != null) {
         _loginState = ApplicationLoginState.loggedIn;
+        _guestBookSubscription = FirebaseFirestore.instance
+            .collection('GroupChat')
+            .orderBy('timestamp', descending: true)
+            .snapshots()
+            .listen((snapshot) {
+          _groupChatMessages = [];
+          snapshot.docs.forEach((document) {
+            print("Message "+document.data()['message']+" timestamp - "+document.data()['timestamp'].toString());
+            _groupChatMessages.add(
+              Message(
+                timestamp: new DateTime.fromMicrosecondsSinceEpoch(document.data()['timestamp']),
+                uid:  document.data()['uid'],
+                displayName: document.data()['displayName'],
+                message: document.data()['message'],
+              ),
+            );
+          });
+          notifyListeners();
+        });
       } else {
         _loginState = ApplicationLoginState.loggedOut;
+        _groupChatMessages = [];
+        _guestBookSubscription?.cancel();
       }
       notifyListeners();
     });
@@ -66,10 +94,10 @@ class ApplicationState extends ChangeNotifier {
     }
 
     return FirebaseFirestore.instance.collection('GroupChat').add({
-      'text': message,
+      'message': message,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
       'displayName': FirebaseAuth.instance.currentUser.displayName,
-      'userId': FirebaseAuth.instance.currentUser.uid,
+      'uid': FirebaseAuth.instance.currentUser.uid,
     });
   }
 }
