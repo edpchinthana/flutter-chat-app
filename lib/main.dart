@@ -84,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
             case ApplicationLoginState.loggedIn:{
               return ChatHome(
                 addMessageToGroupChat: appState.addMessageToGroupChat,
+                messages: appState.groutChatMessages,
               );
             }
             case ApplicationLoginState.loggedOut:{

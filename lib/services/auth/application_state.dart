@@ -14,7 +14,7 @@ class ApplicationState extends ChangeNotifier {
 
   StreamSubscription<QuerySnapshot> _guestBookSubscription;
   List<Message> _groupChatMessages = [];
-  List<Message> get guestBookMessages => _groupChatMessages;
+  List<Message> get groutChatMessages => _groupChatMessages;
 
   Future<void> init() async {
     await Firebase.initializeApp();
