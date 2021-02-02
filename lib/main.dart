@@ -82,7 +82,9 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (context, appState, _){
           switch(appState.loginState){
             case ApplicationLoginState.loggedIn:{
-              return ChatHome();
+              return ChatHome(
+                addMessageToGroupChat: appState.addMessageToGroupChat,
+              );
             }
             case ApplicationLoginState.loggedOut:{
               return Login(

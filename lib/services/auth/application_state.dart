@@ -65,10 +65,10 @@ class ApplicationState extends ChangeNotifier {
       throw Exception('Must be logged in');
     }
 
-    return FirebaseFirestore.instance.collection('groupChat').add({
+    return FirebaseFirestore.instance.collection('GroupChat').add({
       'text': message,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
-      'name': FirebaseAuth.instance.currentUser.displayName,
+      'displayName': FirebaseAuth.instance.currentUser.displayName,
       'userId': FirebaseAuth.instance.currentUser.uid,
     });
   }
