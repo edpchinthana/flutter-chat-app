@@ -1,19 +1,20 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class Login extends StatefulWidget {
+class SignUp extends StatefulWidget {
   final Function (String email, String password, void Function(Exception e) error) signInWithEmailAndPassword;
 
-  Login({Key key, this.signInWithEmailAndPassword}) : super(key : key);
+  SignUp({Key key, this.signInWithEmailAndPassword}) : super(key : key);
 
   @override
-  _LoginState createState() => _LoginState();
+  _SignUpState createState() => _SignUpState();
 }
 
-class _LoginState extends State<Login> {
+class _SignUpState extends State<SignUp> {
+  String displayName;
+  String password1;
+  String password2;
   String email;
-  String password;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class _LoginState extends State<Login> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("User Login",
+              Text("User SignUp",
               style: Theme.of(context).textTheme.headline1,
               ),
               SizedBox(
@@ -35,11 +36,32 @@ class _LoginState extends State<Login> {
                     children: [
                       TextFormField(
                         decoration: InputDecoration(
-                          hintText: "Email Address"
+                            hintText: "Display Name"
                         ),
                         onChanged: (value){
                           setState(() {
                             email = value;
+                          });
+                        },
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                            hintText: "Email Address"
+                        ),
+                        onChanged: (value){
+                          setState(() {
+                            email = value;
+                          });
+                        },
+                      ),
+                      TextFormField(
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          hintText: "Password"
+                        ),
+                        onChanged: (value){
+                          setState(() {
+                            password1 = value;
                           });
                         },
                       ),
@@ -49,11 +71,11 @@ class _LoginState extends State<Login> {
                       TextFormField(
                         obscureText: true,
                         decoration: InputDecoration(
-                            hintText: "Password"
+                            hintText: "Re-Enter Password"
                         ),
                         onChanged: (value){
                           setState(() {
-                            password = value;
+                            password2 = value;
                           });
                         },
                       ),
@@ -62,8 +84,8 @@ class _LoginState extends State<Login> {
                       ),
                       RaisedButton(
                         onPressed: () async {
-                          if(email!= null && password!= null){
-                            await widget.signInWithEmailAndPassword(email, password, (Exception e){
+                          if(email!= null && password2!= null){
+                            await widget.signInWithEmailAndPassword(email, password2, (Exception e){
                               showDialog(context: context,
                                   builder:(context){
                                     return AlertDialog(
@@ -87,29 +109,6 @@ class _LoginState extends State<Login> {
                         color: Colors.amber,
                         child: Text(
                           "Login"
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      RichText(
-                          text: TextSpan(
-                              children: <TextSpan>[
-                                TextSpan(
-                              text:"Don't have an account yet? ",
-                            style: TextStyle(
-                              color: Colors.amber
-                            )
-                          ),
-                          TextSpan(
-                          text:"Register !",
-                              style: TextStyle(
-                                  color: Colors.blue
-                              ),
-                              recognizer: TapGestureRecognizer()..onTap = (){
-                                print("text clicked");
-                              },)
-                              ]
                         ),
                       )
                     ],
