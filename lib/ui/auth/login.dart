@@ -1,3 +1,4 @@
+import 'package:chatapp/ui/auth/signup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -107,7 +108,10 @@ class _LoginState extends State<Login> {
                                   color: Colors.blue
                               ),
                               recognizer: TapGestureRecognizer()..onTap = (){
-                                print("text clicked");
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => SignUp()),
+                                );
                               },)
                               ]
                         ),
