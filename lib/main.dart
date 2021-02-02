@@ -91,6 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
             case ApplicationLoginState.loggedOut:{
               return Login(
                 signInWithEmailAndPassword: appState.signInWithEmailAndPassword,
+                registerAccount: appState.registerAccount,
               );
             }
           }

@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
   final Function (String email, String password, void Function(Exception e) error) signInWithEmailAndPassword;
-
-  Login({Key key, this.signInWithEmailAndPassword}) : super(key : key);
+  final Function (String email, String displayName, String password, void Function(Exception e) error) registerAccount;
+  Login({Key key, this.signInWithEmailAndPassword, this.registerAccount}) : super(key : key);
 
   @override
   _LoginState createState() => _LoginState();
@@ -110,7 +110,7 @@ class _LoginState extends State<Login> {
                               recognizer: TapGestureRecognizer()..onTap = (){
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => SignUp()),
+                                  MaterialPageRoute(builder: (context) => SignUp(registerAccount: widget.registerAccount,)),
                                 );
                               },)
                               ]

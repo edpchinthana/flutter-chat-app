@@ -1,10 +1,11 @@
+import 'package:chatapp/ui/chat/chat_home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SignUp extends StatefulWidget {
-  final Function (String displayName, String email, String password1, String password2, void Function(Exception e) error) signInWithEmailAndPassword;
+  final Function (String email, String displayName, String password, void Function(Exception e) error) registerAccount;
 
-  SignUp({Key key, this.signInWithEmailAndPassword}) : super(key : key);
+  SignUp({Key key, this.registerAccount}) : super(key : key);
 
   @override
   _SignUpState createState() => _SignUpState();
@@ -47,7 +48,7 @@ class _SignUpState extends State<SignUp> {
                           ),
                           onChanged: (value){
                             setState(() {
-                              email = value;
+                              displayName = value;
                             });
                           },
                         ),
@@ -91,14 +92,54 @@ class _SignUpState extends State<SignUp> {
                         ),
                         RaisedButton(
                           onPressed: () async {
-                            if(email!= null && password2!= null){
-                              await widget.signInWithEmailAndPassword(displayName, email,password1, password2, (Exception e){
+                            if(displayName!=null && email!= null && password2!= null && password1!=null){
+                              if(password1 == password2){
+                                bool result = await widget.registerAccount(email, displayName ,password1, (Exception e){
+                                  showDialog(context: context,
+                                      builder:(context){
+                                        return AlertDialog(
+                                          title: Text("SignUp failed"),
+                                          content: Text(
+                                              e.toString()
+                                          ),
+                                          actions: [
+                                            RaisedButton(
+                                                child:  Text("OK"),
+                                                onPressed: (){
+                                                  Navigator.pop(context);
+                                                })
+                                          ],
+                                        );
+                                      }
+                                  );
+                                });
+
+                                if(result){
+                                  showDialog(context: context,
+                                      builder:(context){
+                                        return AlertDialog(
+                                          title: Text("New user created successfully!"),
+                                          content: Text(
+                                              "Please login to use your account"
+                                          ),
+                                          actions: [
+                                            RaisedButton(
+                                                child:  Text("OK"),
+                                                onPressed: (){
+                                                  Navigator.pop(context);
+                                                })
+                                          ],
+                                        );
+                                      }
+                                  );
+                                }
+                              }else{
                                 showDialog(context: context,
                                     builder:(context){
                                       return AlertDialog(
-                                        title: Text("SignUp failed"),
+                                        title: Text("Passwords didn't match."),
                                         content: Text(
-                                            e.toString()
+                                            "Please try again!"
                                         ),
                                         actions: [
                                           RaisedButton(
@@ -110,7 +151,7 @@ class _SignUpState extends State<SignUp> {
                                       );
                                     }
                                 );
-                              });
+                              }
                             }
                           },
                           color: Colors.amber,

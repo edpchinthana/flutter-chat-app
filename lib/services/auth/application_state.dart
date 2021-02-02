@@ -25,7 +25,7 @@ class ApplicationState extends ChangeNotifier {
         _loggedUserId = user.uid;
         _guestBookSubscription = FirebaseFirestore.instance
             .collection('GroupChat')
-            .orderBy('timestamp', descending: true)
+            .orderBy('timestamp', descending: true).limit(20)
             .snapshots()
             .listen((snapshot) {
           _groupChatMessages = [];
@@ -77,14 +77,16 @@ class ApplicationState extends ChangeNotifier {
   }
 
 
-  void registerAccount(String email, String displayName, String password,
+  Future<bool> registerAccount(String email, String displayName, String password,
       void Function(FirebaseAuthException e) errorCallback) async {
     try {
       var credential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: password);
       await credential.user.updateProfile(displayName: displayName);
+      return true;
     } on FirebaseAuthException catch (e) {
       errorCallback(e);
+      return false;
     }
   }
 
