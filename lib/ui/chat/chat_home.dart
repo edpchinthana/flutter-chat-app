@@ -6,7 +6,8 @@ import 'package:flutter/cupertino.dart';
 class ChatHome extends StatefulWidget {
   final Function(String message) addMessageToGroupChat;
   final List<Message> messages;
-  const ChatHome({Key key, this.addMessageToGroupChat, this.messages}) : super(key: key);
+  final String loggedUserId;
+  const ChatHome({Key key, this.addMessageToGroupChat, this.messages, this.loggedUserId}) : super(key: key);
   @override
   _ChatHomeState createState() => _ChatHomeState();
 }
@@ -25,7 +26,16 @@ class _ChatHomeState extends State<ChatHome> {
                 child: Column(
                   children: [
                     for(var message in widget.messages)
-                      MessageBox(message: message),
+                      (widget.loggedUserId == message.uid)?
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: MessageBox(message: message),
+                        )
+                    :
+                      Align(
+                      alignment: Alignment.centerLeft,
+                      child: MessageBox(message: message),
+                      )
                   ],
                 ),
               ),

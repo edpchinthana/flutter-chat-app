@@ -22,6 +22,7 @@ class ApplicationState extends ChangeNotifier {
     FirebaseAuth.instance.userChanges().listen((user) {
       if (user != null) {
         _loginState = ApplicationLoginState.loggedIn;
+        _loggedUserId = user.uid;
         _guestBookSubscription = FirebaseFirestore.instance
             .collection('GroupChat')
             .orderBy('timestamp', descending: true)
@@ -52,6 +53,9 @@ class ApplicationState extends ChangeNotifier {
 
   ApplicationLoginState _loginState;
   ApplicationLoginState get loginState => _loginState;
+
+  String _loggedUserId;
+  String get loggedUserId => _loggedUserId;
 
   String _email;
   String get email => _email;
