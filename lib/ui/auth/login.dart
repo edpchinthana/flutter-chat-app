@@ -2,24 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
-  final String title;
+  final Function (String email, String password, void Function(Exception e) error) signInWithEmailAndPassword;
 
-  Login({Key key, this.title}) : super(key : key);
+  Login({Key key, this.signInWithEmailAndPassword}) : super(key : key);
 
   @override
   _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
+  String email;
+  String password;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-            widget.title
-        ),
-      ),
-      body: Container(
+    return Container(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -40,7 +37,9 @@ class _LoginState extends State<Login> {
                           hintText: "Email Address"
                         ),
                         onChanged: (value){
-                          
+                          setState(() {
+                            email = value;
+                          });
                         },
                       ),
                       SizedBox(
@@ -52,15 +51,37 @@ class _LoginState extends State<Login> {
                             hintText: "Password"
                         ),
                         onChanged: (value){
-
+                          setState(() {
+                            password = value;
+                          });
                         },
                       ),
                       SizedBox(
                         height: 20,
                       ),
                       RaisedButton(
-                        onPressed: (){
-
+                        onPressed: () async {
+                          if(email!= null && password!= null){
+                            await widget.signInWithEmailAndPassword(email, password, (Exception e){
+                              showDialog(context: context,
+                                  builder:(context){
+                                    return AlertDialog(
+                                      title: Text("Login failed"),
+                                      content: Text(
+                                        e.toString()
+                                      ),
+                                      actions: [
+                                        RaisedButton(
+                                            child:  Text("OK"),
+                                            onPressed: (){
+                                          Navigator.pop(context);
+                                        })
+                                      ],
+                                    );
+                              }
+                              );
+                            });
+                          }
                         },
                         color: Colors.amber,
                         child: Text(
@@ -74,7 +95,6 @@ class _LoginState extends State<Login> {
             ],
           ),
         ),
-      ),
     );
   }
 }
